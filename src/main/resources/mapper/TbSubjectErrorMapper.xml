@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hthyaq.learnadmin.mapper.TbSubjectErrorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hthyaq.learnadmin.model.entity.TbSubjectError">
+        <id column="id" property="id" />
+        <result column="subject_id" property="subjectId" />
+        <result column="subject_name" property="subjectName" />
+        <result column="error_rate" property="errorRate" />
+        <result column="start_age" property="startAge" />
+        <result column="end_age" property="endAge" />
+        <result column="subject_type" property="subjectType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, subject_id, subject_name, error_rate, start_age, end_age, subject_type
+    </sql>
+
+</mapper>

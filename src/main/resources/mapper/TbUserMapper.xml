@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hthyaq.learnadmin.mapper.TbUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hthyaq.learnadmin.model.entity.TbUser">
+        <id column="user_id" property="userId" />
+        <result column="username" property="username" />
+        <result column="mobile" property="mobile" />
+        <result column="password" property="password" />
+        <result column="create_time" property="createTime" />
+        <result column="open_id" property="openId" />
+        <result column="secret" property="secret" />
+        <result column="answer_time" property="answerTime" />
+        <result column="user_head" property="userHead" />
+        <result column="user_gender" property="userGender" />
+        <result column="id_card" property="idCard" />
+        <result column="answer_num" property="answerNum" />
+        <result column="answer_duration" property="answerDuration" />
+        <result column="nike_name" property="nikeName" />
+        <result column="u_address" property="uAddress" />
+        <result column="is_recommend" property="isRecommend" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, username, mobile, password, create_time, open_id, secret, answer_time, user_head, user_gender, id_card, answer_num, answer_duration, nike_name, u_address, is_recommend
+    </sql>
+
+    <select id="pages" resultMap="BaseResultMap">
+        SELECT
+tu.*,
+	SUM(answer_num) num,
+	SUM(answer_duration) dur
+FROM
+	tb_user tu
+LEFT JOIN company c ON tu.secret = c.id
+<include refid="pageQuery"/>
+GROUP BY tu.user_id
+ORDER BY SUM(answer_num) desc,SUM(answer_duration) ASC
+LIMIT #{currentPage},#{pageSize}
+    </select>
+    <sql id="pageQuery">
+        <where>
+            <if test="username != null and username != ''">
+                and tu.username like concat('%',#{username},'%')
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and tu.mobile like concat('%',#{mobile},'%')
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and tu.secret like concat('%',#{companyName},'%')
+            </if>
+        </where>
+    </sql>
+    <select id="pageGroup" resultType="com.hthyaq.learnadmin.model.dto.UserDTO">
+        SELECT
+        sum(answer_num) num,
+        SUM(answer_duration) dur,
+        t.secret,
+        c.company_name  companyName
+        FROM
+        tb_user t
+        LEFT JOIN company c ON t.secret = c.id
+        <include refid="pageQuery2"/>
+GROUP BY
+        t.secret
+ ORDER BY num DESC,dur ASC
+    </select>
+
+
+    <sql id="pageQuery2">
+        <where>
+            <if test="companyName != null and companyName != ''">
+                and c.id like concat('%',#{companyName},'%')
+            </if>
+        </where>
+    </sql>
+</mapper>

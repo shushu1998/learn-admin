@@ -1,0 +1,65 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
+    id 'war'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.hthyaq'
+archivesBaseName = 'learn'
+sourceCompatibility = '1.8'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+}
+
+dependencies {
+    //MD5
+    implementation 'org.apache.commons:commons-lang3:3.3.2'
+    //jsoup
+    implementation 'org.jsoup:jsoup:1.12.1'
+    //fastjson
+    implementation 'com.alibaba:fastjson:1.2.59'
+    //hutool
+    implementation 'cn.hutool:hutool-all:4.6.1'
+    //easyexcel
+    implementation 'com.alibaba:easyexcel:1.1.1'
+    //ureport2
+    implementation('com.bstek.ureport:ureport2-console:2.2.9') {
+        exclude group: 'com.google.zxing'
+    }
+    //guava
+    implementation 'com.google.guava:guava:28.0-jre'
+    //druid
+    implementation 'com.alibaba:druid-spring-boot-starter:1.1.18'
+    //mybatis plus
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.1.2'
+    implementation 'com.baomidou:mybatis-plus-generator:3.1.2'
+    //自动勾选
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+//    implementation 'org.springframework.session:spring-session-data-redis'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'mysql:mysql-connector-java'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}

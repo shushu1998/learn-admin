@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hthyaq.learnadmin.mapper.TbSubjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hthyaq.learnadmin.model.entity.TbSubject">
+        <id column="id" property="id" />
+        <result column="subject_type" property="subjectType" />
+        <result column="content" property="content" />
+        <result column="option_a" property="optionA" />
+        <result column="option_b" property="optionB" />
+        <result column="option_c" property="optionC" />
+        <result column="option_d" property="optionD" />
+        <result column="option_e" property="optionE" />
+        <result column="option_f" property="optionF" />
+        <result column="right_option" property="rightOption" />
+        <result column="start_age" property="startAge" />
+        <result column="end_age" property="endAge" />
+        <result column="content_type" property="contentType" />
+        <result column="library_type" property="libraryType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, subject_type, content, option_a, option_b, option_c, option_d, option_e, option_f, right_option, start_age, end_age, content_type, library_type
+    </sql>
+
+</mapper>
