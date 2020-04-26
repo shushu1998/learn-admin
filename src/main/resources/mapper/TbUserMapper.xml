@@ -66,9 +66,8 @@ LIMIT #{currentPage},#{pageSize}
 GROUP BY
         t.secret
  ORDER BY num DESC,dur ASC
+        LIMIT #{currentPage},#{pageSize}
     </select>
-
-
     <sql id="pageQuery2">
         <where>
             <if test="companyName != null and companyName != ''">
@@ -76,4 +75,53 @@ GROUP BY
             </if>
         </where>
     </sql>
+
+    <select id="listGlobal" resultType="com.hthyaq.learnadmin.model.dto.UserDTO">
+        SELECT
+        sum(answer_num) num,
+        SUM(answer_duration) dur,
+        t.secret,
+        c.company_name  companyName
+        FROM
+        tb_user t
+        LEFT JOIN company c ON t.secret = c.id
+        <include refid="pageQuery3"/>
+        GROUP BY
+        t.secret
+        ORDER BY num DESC,dur ASC
+    </select>
+    <sql id="pageQuery3">
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                and c.id like concat('%',#{companyName},'%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="personalList"  resultMap="BaseResultMap">
+        SELECT
+        tu.*,
+        SUM(answer_num) num,
+        SUM(answer_duration) dur
+        FROM
+        tb_user tu
+        LEFT JOIN company c ON tu.secret = c.id
+        <include refid="pageQuery4"/>
+        GROUP BY tu.user_id
+        ORDER BY SUM(answer_num) desc,SUM(answer_duration) ASC
+    </select>
+    <sql id="pageQuery4">
+        <where>
+                <if test="username != null and username != ''">
+                    and tu.username like concat('%',#{username},'%')
+                </if>
+                <if test="mobile != null and mobile != ''">
+                    and tu.mobile like concat('%',#{mobile},'%')
+                </if>
+                <if test="secret != null and secret != ''">
+                    and tu.secret like concat('%',#{secret},'%')
+                </if>
+        </where>
+    </sql>
+
 </mapper>

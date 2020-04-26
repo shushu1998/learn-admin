@@ -20,4 +20,8 @@ public interface TbUserService extends IService<TbUser> {
     List<TbUser> pages(Integer currentPage, Integer pageSize, String username, String mobile, String companyName);
 
     List<UserDTO> pageGroup(Integer currentPage, Integer pageSize, String companyName);
+
+    List<UserDTO> listGlobal(String companyName);
+
+    List<TbUser> personalList(String username, String secret, String mobile);
 }

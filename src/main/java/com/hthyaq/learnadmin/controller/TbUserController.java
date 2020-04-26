@@ -7,16 +7,25 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
+import com.hthyaq.learnadmin.common.constants.GlobalConstants;
+import com.hthyaq.learnadmin.common.excle.DownloadFile;
+import com.hthyaq.learnadmin.common.excle.MyExcelUtil;
 import com.hthyaq.learnadmin.model.bean.GlobalResult;
 import com.hthyaq.learnadmin.model.dto.UserDTO;
 import com.hthyaq.learnadmin.model.dto.UserView;
 import com.hthyaq.learnadmin.model.entity.Company;
 import com.hthyaq.learnadmin.model.entity.TbUser;
+import com.hthyaq.learnadmin.model.excelModel.GroupListModel;
+import com.hthyaq.learnadmin.model.excelModel.PersonalListModel;
+import com.hthyaq.learnadmin.model.excelModel.TbuserExcelModel;
 import com.hthyaq.learnadmin.service.CompanyService;
 import com.hthyaq.learnadmin.service.TbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,4 +208,126 @@ public class TbUserController {
 
         return tbUser;
     }
+
+    //导出团队excel
+
+    @GetMapping("/GroupListExcel")
+    public void GroupListExcel(HttpServletResponse response,@RequestParam("companyName") String companyName) throws Exception {
+
+        if(companyName.equals("undefined")){
+            companyName="";
+        }
+        List<UserDTO> page = tbUserService.listGlobal(companyName);
+        List<GroupListModel> dataList = new ArrayList<>();
+        int i=1;
+        for (UserDTO userDTO : page) {
+            GroupListModel groupListModel=new GroupListModel();
+            if(userDTO.getCompanyName()==null){
+                groupListModel.setCompanyName("无");
+            }else {
+                groupListModel.setCompanyName(userDTO.getCompanyName());
+            }
+            groupListModel.setDur(Integer.parseInt(userDTO.getDur()+"秒"));
+            groupListModel.setNum(userDTO.getNum());
+            groupListModel.setRanking(i);
+            dataList.add(groupListModel);
+            i++;
+        }
+                //learnFile/excel
+                String file = GlobalConstants.EXCEL_PATH +"/团队排榜.xlsx";
+                //先删除
+                File fileTmp = new File(file);
+                if (fileTmp.exists()) {
+                    fileTmp.delete();
+                }
+                MyExcelUtil.writeOneSheetExcel(file, dataList, GroupListModel.class);
+                new DownloadFile().download(file, response);
+    }
+
+    //导出个人excel
+    @GetMapping("/PersonalListExcel")
+    public void PersonalListExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile,@RequestParam("secret") String secret) throws Exception {
+
+        if(username.equals("undefined")){
+            username="";
+        }
+        if(secret.equals("undefined")){
+            secret="";
+        }
+        if(mobile.equals("undefined")){
+            mobile="";
+        }
+        List<TbUser> page = tbUserService.personalList(username,secret,mobile);
+        List<PersonalListModel> dataList = new ArrayList<>();
+        int i=1;
+        for (TbUser tbUser : page) {
+            PersonalListModel personalListModel=new PersonalListModel();
+            Company company = companyService.getById(tbUser.getSecret());
+            if (company!=null){
+                personalListModel.setCompanyName(company.getCompanyName());
+            }else {
+                personalListModel.setCompanyName("无");
+            }
+            personalListModel.setDur(tbUser.getAnswerDuration());
+            personalListModel.setNum(tbUser.getAnswerNum());
+            personalListModel.setMobile(tbUser.getMobile());
+            personalListModel.setRanking(i);
+            personalListModel.setUsername(tbUser.getUsername());
+            dataList.add(personalListModel);
+            i++;
+        }
+        //learnFile/excel
+        String file = GlobalConstants.EXCEL_PATH +"/个人排榜.xlsx";
+        //先删除
+        File fileTmp = new File(file);
+        if (fileTmp.exists()) {
+            fileTmp.delete();
+        }
+        MyExcelUtil.writeOneSheetExcel(file, dataList, PersonalListModel.class);
+        new DownloadFile().download(file, response);
+    }
+    //导出个人excel
+    @GetMapping("/tbuserExcel")
+    public void tbuserExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile) throws Exception {
+        QueryWrapper<TbUser> queryWrapper=new QueryWrapper<>();
+        if(username.equals("undefined")){
+            username="";
+        }
+        if(mobile.equals("undefined")){
+            mobile="";
+        }
+        queryWrapper.like("username",username);
+        queryWrapper.like("mobile",mobile);
+        List<TbUser> list = tbUserService.list(queryWrapper);
+        List<TbuserExcelModel> dataList = new ArrayList<>();
+        for (TbUser tbUser : list) {
+            TbuserExcelModel tbuserExcelModel = new TbuserExcelModel();
+            Company company = companyService.getById(tbUser.getSecret());
+            if (company != null) {
+                tbuserExcelModel.setSecret(company.getCompanyName());
+            } else {
+                tbuserExcelModel.setSecret("无");
+            }
+            tbuserExcelModel.setUserId(tbUser.getUserId());
+            tbuserExcelModel.setAnswerDuration(tbUser.getAnswerDuration());
+            tbuserExcelModel.setAnswerNum(tbUser.getAnswerNum());
+            if (tbUser.getAnswerTime()!= null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String AnswerTime = sdf.format(tbUser.getAnswerTime());
+                tbuserExcelModel.setAnswerTime(AnswerTime);
+            }
+            tbuserExcelModel.setMobile(tbUser.getMobile());
+            tbuserExcelModel.setUsername(tbUser.getUsername());
+            dataList.add(tbuserExcelModel);
+        }
+        //learnFile/excel
+        String file = GlobalConstants.EXCEL_PATH +"/小程序用户数据.xlsx";
+        //先删除
+        File fileTmp = new File(file);
+        if (fileTmp.exists()) {
+            fileTmp.delete();
+        }
+        MyExcelUtil.writeOneSheetExcel(file, dataList, TbuserExcelModel.class);
+        new DownloadFile().download(file, response);
+        }
 }

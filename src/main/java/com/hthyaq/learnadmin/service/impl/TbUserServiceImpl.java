@@ -34,5 +34,15 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         return tbUserMapper.pageGroup(currentPage,pageSize,companyName);
     }
 
+    @Override
+    public List<UserDTO> listGlobal(String companyName) {
+        return tbUserMapper.listGlobal(companyName);
+    }
+
+    @Override
+    public List<TbUser> personalList(String username, String secret, String mobile) {
+        return tbUserMapper.personalList(username,mobile,secret);
+    }
+
 
 }

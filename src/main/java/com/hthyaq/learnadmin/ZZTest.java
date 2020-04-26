@@ -1,17 +1,13 @@
 package com.hthyaq.learnadmin;
 
-import com.hthyaq.learnadmin.common.excle.MyExcelUtil;
-import com.hthyaq.learnadmin.model.excelModel.AccidentOfSuperviseModel;
-
 import java.io.IOException;
-import java.util.List;
 
 public class ZZTest {
     public static void main(String[] args) throws IOException {
-        //读取excel的一个sheet
-        List<Object> list = MyExcelUtil.readOneSheetExcel(null, AccidentOfSuperviseModel.class);
-        Object obj = (Object) list;
-        List<AccidentOfSuperviseModel> dataList = (List<AccidentOfSuperviseModel>) obj;
+//        //读取excel的一个sheet
+//        List<Object> list = MyExcelUtil.readOneSheetExcel(null, AccidentOfSuperviseModel.class);
+//        Object obj = (Object) list;
+//        List<AccidentOfSuperviseModel> dataList = (List<AccidentOfSuperviseModel>) obj;
         //下载excel，包含一个sheet
 ////导出excel
 //        @Controller

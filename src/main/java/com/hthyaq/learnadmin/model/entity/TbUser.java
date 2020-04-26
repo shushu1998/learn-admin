@@ -112,13 +112,19 @@ public class TbUser implements Serializable {
     private Integer isRecommend;
 
 
-
+    /**
+     * 名次
+     */
     @TableField(exist = false)
     private Integer Ranking;
-
+    /**
+     * 答题题数
+     */
     @TableField(exist = false)
     private Integer answerNums;
-
+    /**
+     * 耗时
+     */
     @TableField(exist = false)
     private Integer answerDurations;
 

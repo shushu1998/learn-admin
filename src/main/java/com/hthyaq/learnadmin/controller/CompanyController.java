@@ -7,12 +7,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
+import com.hthyaq.learnadmin.model.dto.CompanyView;
 import com.hthyaq.learnadmin.model.entity.Company;
 import com.hthyaq.learnadmin.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -39,12 +43,25 @@ public class CompanyController {
 
         QueryWrapper<Company> queryWrapper = new QueryWrapper<>();
         if (!Strings.isNullOrEmpty(companyName)) {
-            queryWrapper.like("email",companyName );
+            queryWrapper.like("company_name",companyName );
         }
-
 
         IPage<Company> page = companyService.page(new Page<>(currentPage, pageSize), queryWrapper);
 
         return page;
     }
+
+    @GetMapping("/listall")
+    public List<CompanyView> list() {
+        List<Company> list = companyService.list();
+        List<CompanyView> list1=new ArrayList<>();
+        for (Company company : list) {
+            CompanyView companyView=new CompanyView();
+            companyView.setLabel(company.getCompanyName());
+            companyView.setValue(company.getId());
+            list1.add(companyView);
+        }
+        return list1;
+    }
+
 }
