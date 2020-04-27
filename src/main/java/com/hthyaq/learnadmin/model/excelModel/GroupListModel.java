@@ -19,4 +19,7 @@ public class GroupListModel extends BaseRowModel {
 
     @ExcelProperty(value = {"总耗时间(秒)"},index=3)
     private Integer dur;
+
+    @ExcelProperty(value = {"当前日期"},index=4)
+    private String newtime;
 }

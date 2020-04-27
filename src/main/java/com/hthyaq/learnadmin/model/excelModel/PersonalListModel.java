@@ -25,4 +25,7 @@ public class PersonalListModel extends BaseRowModel {
 
     @ExcelProperty(value = {"时间(秒) "},index=5)
     private String dur;
+
+    @ExcelProperty(value = {"当前日期"},index=6)
+    private String newtime;
 }

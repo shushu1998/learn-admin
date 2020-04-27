@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -248,7 +249,7 @@ public class TbUserController {
         return tbUser;
     }
 
-    //导出团队excel
+    //导出团队排行excel
 
     @GetMapping("/GroupListExcel")
     public void GroupListExcel(HttpServletResponse response,@RequestParam("companyName") String companyName) throws Exception {
@@ -269,6 +270,9 @@ public class TbUserController {
             groupListModel.setDur(userDTO.getDur());
             groupListModel.setNum(userDTO.getNum());
             groupListModel.setRanking(i);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            groupListModel.setNewtime(df.format( new Date()));
             dataList.add(groupListModel);
             i++;
         }
@@ -283,7 +287,7 @@ public class TbUserController {
                 new DownloadFile().download(file, response);
     }
 
-    //导出个人excel
+    //导出个人排行excel
     @GetMapping("/PersonalListExcel")
     public void PersonalListExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile,@RequestParam("secret") String secret) throws Exception {
 
@@ -312,6 +316,8 @@ public class TbUserController {
             personalListModel.setMobile(tbUser.getMobile());
             personalListModel.setRanking(i);
             personalListModel.setUsername(tbUser.getUsername());
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            personalListModel.setNewtime(df.format( new Date()));
             dataList.add(personalListModel);
             i++;
         }
