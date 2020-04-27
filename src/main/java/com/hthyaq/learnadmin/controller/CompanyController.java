@@ -46,6 +46,7 @@ public class CompanyController {
             queryWrapper.like("company_name",companyName );
         }
 
+
         IPage<Company> page = companyService.page(new Page<>(currentPage, pageSize), queryWrapper);
 
         return page;
