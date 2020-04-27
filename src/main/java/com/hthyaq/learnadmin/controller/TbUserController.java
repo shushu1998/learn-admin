@@ -151,7 +151,29 @@ public class TbUserController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         String username = jsonObject.getString("username");
         String mobile = jsonObject.getString("mobile");
-        String companyName = jsonObject.getString("secret");
+        String companyName1 = jsonObject.getString("secret");
+        if(companyName1!=null){
+            String[] strs=companyName1.split("-");
+            String companyName=strs[0];
+            IPage<TbUser> page1=new Page<>(currentPage, pageSize);
+
+            List<TbUser> page = tbUserService.pages((currentPage-1)*pageSize,pageSize,username,mobile,companyName);
+            int i=1;
+            for (TbUser tbUser : page) {
+                tbUser.setRanking(i);
+                Company company = companyService.getById(tbUser.getSecret());
+                if (company!=null){
+                    tbUser.setSecret(company.getCompanyName());
+                }else {
+                    tbUser.setSecret("无");
+                }
+                i++;
+            }
+            page1.setRecords(page);
+            page1.setTotal(tbUserService.count());
+            return page1;
+        }
+        String companyName=null;
         IPage<TbUser> page1=new Page<>(currentPage, pageSize);
 
         List<TbUser> page = tbUserService.pages((currentPage-1)*pageSize,pageSize,username,mobile,companyName);
@@ -180,9 +202,26 @@ public class TbUserController {
         //从对象中获取值
         Integer currentPage = jsonObject.getInteger("currentPage");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        String companyName = jsonObject.getString("companyName");
+        String companyName1 = jsonObject.getString("companyName");
+        if(companyName1!=null){
+            String[] strs=companyName1.split("-");
+            String companyName=strs[0];
+            IPage<UserDTO> page1=new Page<>(currentPage, pageSize);
 
-
+            List<UserDTO> page = tbUserService.pageGroup((currentPage-1)*pageSize,pageSize,companyName);
+            int i=1;
+            for (UserDTO userDTO : page) {
+                userDTO.setRanking(i);
+                if(userDTO.getCompanyName()==null){
+                    userDTO.setCompanyName("无");
+                }
+                i++;
+            }
+            page1.setRecords(page);
+            page1.setTotal(tbUserService.count());
+            return page1;
+        }
+        String companyName=null;
         IPage<UserDTO> page1=new Page<>(currentPage, pageSize);
 
         List<UserDTO> page = tbUserService.pageGroup((currentPage-1)*pageSize,pageSize,companyName);
