@@ -1,14 +1,10 @@
 部署步骤：
     1.后台调整
         去掉IndexController中的index的@GetMapping的注释
-        修改CreateDirectory中的directory
         修改GlobalConstants中的EXCEL_PATH
         logback-spring.xml
             修改日志级别：fileErrorApp
             修改目录：    d:/learnFile
-        ureport.properties
-            ureport.debug=false
-            ureport.fileStoreDir=D:/learnFile/ureportfiles
         注释掉application.yml的log-impl
         修改application.yml的数据库的IP
     2.前端整合
