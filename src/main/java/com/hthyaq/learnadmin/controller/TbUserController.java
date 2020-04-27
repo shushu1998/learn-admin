@@ -266,7 +266,7 @@ public class TbUserController {
             }else {
                 groupListModel.setCompanyName(userDTO.getCompanyName());
             }
-            groupListModel.setDur(Integer.parseInt(userDTO.getDur()+"秒"));
+            groupListModel.setDur(userDTO.getDur());
             groupListModel.setNum(userDTO.getNum());
             groupListModel.setRanking(i);
             dataList.add(groupListModel);

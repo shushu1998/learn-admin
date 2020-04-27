@@ -2,7 +2,6 @@ package com.hthyaq.learnadmin.common.config;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 
@@ -12,7 +11,7 @@ import java.io.File;
         D:/learnFile/ureportfiles
         D:/learnFile/excel
  */
-@Component
+//@Component
 public class CreateDirectoryConfig implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
