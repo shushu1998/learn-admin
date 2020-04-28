@@ -44,5 +44,15 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         return tbUserMapper.personalList(username,mobile,secret);
     }
 
+    @Override
+    public List<UserDTO> countGroup(String companyName) {
+        return tbUserMapper.countGroup(companyName);
+    }
+
+    @Override
+    public List<TbUser> countpages( String username, String mobile, String companyName) {
+        return tbUserMapper.countpages(username,mobile,companyName);
+    }
+
 
 }

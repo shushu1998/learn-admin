@@ -68,6 +68,7 @@ GROUP BY
  ORDER BY num DESC,dur ASC
         LIMIT #{currentPage},#{pageSize}
     </select>
+
     <sql id="pageQuery2">
         <where>
             <if test="companyName != null and companyName != ''">
@@ -124,4 +125,43 @@ GROUP BY
         </where>
     </sql>
 
+    <select id="countGroup" resultType="com.hthyaq.learnadmin.model.dto.UserDTO">
+        SELECT-->
+        c.company_name  companyName
+        FROM
+        tb_user t
+        LEFT JOIN company c ON t.secret = c.id
+        <include refid="pageQuery5"/>
+        GROUP BY
+        t.secret
+    </select>
+    <sql id="pageQuery5">
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                 c.id like concat('%',#{companyName},'%')
+            </if>
+        </where>
+    </sql>
+    <select id="countpages" resultType="com.hthyaq.learnadmin.model.entity.TbUser">
+        SELECT
+        tu.*
+        FROM
+        tb_user tu
+        LEFT JOIN company c ON tu.secret = c.id
+        <include refid="pageQuery6"/>
+        GROUP BY tu.user_id
+    </select>
+    <sql id="pageQuery6">
+        <where>
+            <if test="username != null and username != ''">
+                and tu.username like concat('%',#{username},'%')
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and tu.mobile like concat('%',#{mobile},'%')
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and tu.secret like concat('%',#{companyName},'%')
+            </if>
+        </where>
+    </sql>
 </mapper>

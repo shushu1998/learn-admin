@@ -182,7 +182,7 @@ public class TbUserController {
                 i++;
             }
             page1.setRecords(page);
-            page1.setTotal(tbUserService.count());
+            page1.setTotal(tbUserService.countpages(username,mobile,companyName).size());
             return page1;
         }
         String companyName=null;
@@ -201,7 +201,7 @@ public class TbUserController {
             i++;
         }
         page1.setRecords(page);
-        page1.setTotal(tbUserService.count());
+        page1.setTotal(tbUserService.countpages(username,mobile,companyName).size());
         return page1;
     }
 
@@ -230,7 +230,7 @@ public class TbUserController {
                 i++;
             }
             page1.setRecords(page);
-            page1.setTotal(tbUserService.count());
+            page1.setTotal( tbUserService.countGroup(companyName).size());
             return page1;
         }
         String companyName=null;
@@ -246,7 +246,7 @@ public class TbUserController {
             i++;
         }
         page1.setRecords(page);
-        page1.setTotal(tbUserService.count());
+        page1.setTotal( tbUserService.countGroup(companyName).size());
         return page1;
     }
 

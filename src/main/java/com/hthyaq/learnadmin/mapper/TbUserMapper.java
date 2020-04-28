@@ -26,4 +26,8 @@ public interface TbUserMapper extends BaseMapper<TbUser> {
     List<UserDTO> listGlobal(String companyName);
 
     List<TbUser> personalList(String username, String mobile, String secret);
+
+    List<UserDTO> countGroup(String companyName);
+
+    List<TbUser> countpages(String username, String mobile, String companyName);
 }

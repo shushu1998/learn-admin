@@ -24,4 +24,8 @@ public interface TbUserService extends IService<TbUser> {
     List<UserDTO> listGlobal(String companyName);
 
     List<TbUser> personalList(String username, String secret, String mobile);
+
+    List<UserDTO>  countGroup(String companyName);
+
+    List<TbUser> countpages( String username, String mobile, String companyName);
 }
