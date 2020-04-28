@@ -57,6 +57,8 @@ public class TbUserController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         String username = jsonObject.getString("username");
         String mobile = jsonObject.getString("mobile");
+        String companyName1 = jsonObject.getString("secret");
+
         QueryWrapper<TbUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("user_id");
         if (!Strings.isNullOrEmpty(username)) {
@@ -64,6 +66,11 @@ public class TbUserController {
         }
         if (!Strings.isNullOrEmpty(mobile)) {
             queryWrapper.like("mobile",mobile );
+        }
+        if (!Strings.isNullOrEmpty(companyName1)) {
+            String[] strs=companyName1.split("-");
+            String secret=strs[0];
+            queryWrapper.like("secret",secret );
         }
         IPage<TbUser> page = tbUserService.page(new Page<>(currentPage, pageSize), queryWrapper);
         for (TbUser record : page.getRecords()) {
@@ -115,11 +122,15 @@ public class TbUserController {
     @PostMapping("/editrecommend")
     public GlobalResult editrecommend(@RequestBody UserView userView) {
         System.out.println(userView);
-        QueryWrapper<TbUser> queryWrapper=new QueryWrapper();
-        queryWrapper.eq("is_recommend",1);
-        List<TbUser> list = tbUserService.list(queryWrapper);
-        if(list.size()>3){
-            return GlobalResult.fail("人数已满");
+//        QueryWrapper<TbUser> queryWrapper=new QueryWrapper();
+//        queryWrapper.eq("is_recommend",1);
+//        queryWrapper.eq("secret",userView.getId());
+//        List<TbUser> list = tbUserService.list(queryWrapper);
+//        if(list.size()>=3){
+//            return GlobalResult.fail("人数已满");
+//        }
+        if(userView.getTargetKeys().size()>3){
+            return GlobalResult.fail("已大于3人");
         }
         QueryWrapper<TbUser> queryWrapper3=new QueryWrapper();
         queryWrapper3.eq("secret",userView.getId());
@@ -333,13 +344,21 @@ public class TbUserController {
     }
     //导出个人excel
     @GetMapping("/tbuserExcel")
-    public void tbuserExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile) throws Exception {
+    public void tbuserExcel(HttpServletResponse response,@RequestParam("secret") String secret,@RequestParam("username") String username,@RequestParam("mobile") String mobile) throws Exception {
         QueryWrapper<TbUser> queryWrapper=new QueryWrapper<>();
         if(username.equals("undefined")){
             username="";
         }
         if(mobile.equals("undefined")){
             mobile="";
+        }
+        if(secret.equals("undefined")){
+            secret="";
+        }
+        if(!secret.equals("")){
+            String[] strs=secret.split("-");
+            String secret1=strs[0];
+            queryWrapper.like("secret",secret1 );
         }
         queryWrapper.like("username",username);
         queryWrapper.like("mobile",mobile);

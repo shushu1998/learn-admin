@@ -75,12 +75,16 @@ public class SysUserController {
 //    }
 
     @GetMapping("/delete")
-    public GlobalResult delete(Integer id) {
-        QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("user_id",id);
-        //demo
-        sysUserService.remove(queryWrapper);
-
+    public GlobalResult delete(Integer[] id) {
+        if (null == id) {
+            return GlobalResult.fail("请至少选择一条记录");
+        }
+        for (Integer ids : id) {
+            QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
+            queryWrapper.eq("user_id",ids);
+            //demo
+            sysUserService.remove(queryWrapper);
+        }
         return GlobalResult.success("");
     }
 

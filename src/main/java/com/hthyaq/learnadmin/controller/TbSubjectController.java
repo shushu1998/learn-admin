@@ -106,13 +106,17 @@ public class TbSubjectController {
     }
 
     @GetMapping("/delete")
-    public GlobalResult delete(Integer id) {
-        QueryWrapper<TbSubject> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", id);
-        //demo
-        tbSubjectService.remove(queryWrapper);
-
-        return GlobalResult.success("");
+    public GlobalResult delete(Integer[] id) {
+        System.out.println(id);
+        if (null == id) {
+            return GlobalResult.fail("请至少选择一条记录");
+        }
+        for (Integer ids : id) {
+            QueryWrapper<TbSubject> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("id", ids);
+            tbSubjectService.remove(queryWrapper);
+        }
+        return GlobalResult.success("成功");
     }
 
     //导出题目模板

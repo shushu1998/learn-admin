@@ -21,14 +21,16 @@ public class TbuserExcelModel extends BaseRowModel {
     @ExcelProperty(value = {"单位名称"},index=3)
     private String secret;
 
-    @ExcelProperty(value = {"答题时间(秒)"},index=4)
-    private String answerTime;
-
-    @ExcelProperty(value = {"答对数量"},index=5)
+    @ExcelProperty(value = {"答对数量"},index=4)
     private Integer answerNum;
 
-    @ExcelProperty(value = {"答题时长"},index=6)
+    @ExcelProperty(value = {"答题用时(秒)"},index=5)
     private String answerDuration;
+
+
+
+    @ExcelProperty(value = {"答题时间"},index=6)
+    private String answerTime;
 
 
 }
