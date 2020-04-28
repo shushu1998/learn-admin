@@ -384,14 +384,28 @@ public class TbUserController {
             tbuserExcelModel.setUsername(tbUser.getUsername());
             dataList.add(tbuserExcelModel);
         }
-        //learnFile/excel
-        String file = GlobalConstants.EXCEL_PATH +"/小程序用户数据.xlsx";
-        //先删除
-        File fileTmp = new File(file);
-        if (fileTmp.exists()) {
-            fileTmp.delete();
+        if(!secret.equals("")){
+            String[] strs=secret.split("-");
+            String secret1=strs[1];
+            //learnFile/excel
+            String file = GlobalConstants.EXCEL_PATH +"/"+secret1+".xlsx";
+            //先删除
+            File fileTmp = new File(file);
+            if (fileTmp.exists()) {
+                fileTmp.delete();
+            }
+            MyExcelUtil.writeOneSheetExcel(file, dataList, TbuserExcelModel.class);
+            new DownloadFile().download(file, response);
+        }else {
+            //learnFile/excel
+            String file = GlobalConstants.EXCEL_PATH +"/小程序用户数据.xlsx";
+            //先删除
+            File fileTmp = new File(file);
+            if (fileTmp.exists()) {
+                fileTmp.delete();
+            }
+            MyExcelUtil.writeOneSheetExcel(file, dataList, TbuserExcelModel.class);
+            new DownloadFile().download(file, response);
         }
-        MyExcelUtil.writeOneSheetExcel(file, dataList, TbuserExcelModel.class);
-        new DownloadFile().download(file, response);
-        }
+    }
 }
