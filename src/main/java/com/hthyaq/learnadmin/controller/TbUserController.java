@@ -298,20 +298,25 @@ public class TbUserController {
                 new DownloadFile().download(file, response);
     }
 
+
+
     //导出个人排行excel
     @GetMapping("/PersonalListExcel")
-    public void PersonalListExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile,@RequestParam("secret") String secret) throws Exception {
+    public void PersonalListExcel(HttpServletResponse response,@RequestParam("username") String username,@RequestParam("mobile") String mobile,@RequestParam("secret") String secret1) throws Exception {
 
         if(username.equals("undefined")){
             username="";
         }
-        if(secret.equals("undefined")){
-            secret="";
+        if(secret1.equals("undefined")){
+            secret1="";
         }
         if(mobile.equals("undefined")){
             mobile="";
         }
-        List<TbUser> page = tbUserService.personalList(username,secret,mobile);
+            String[] strs=secret1.split("-");
+            String secret=strs[0];
+
+            List<TbUser> page = tbUserService.personalList(username,secret,mobile);
         List<PersonalListModel> dataList = new ArrayList<>();
         int i=1;
         for (TbUser tbUser : page) {
@@ -332,17 +337,32 @@ public class TbUserController {
             dataList.add(personalListModel);
             i++;
         }
-        //learnFile/excel
-        String file = GlobalConstants.EXCEL_PATH +"/个人排榜.xlsx";
-        //先删除
-        File fileTmp = new File(file);
-        if (fileTmp.exists()) {
-            fileTmp.delete();
+        if(!secret1.equals("")){
+            String[] strs2=secret1.split("-");
+            String secret2=strs2[1];
+            //learnFile/excel
+            String file = GlobalConstants.EXCEL_PATH +"/"+secret2+"个人排榜.xlsx";
+            //先删除
+            File fileTmp = new File(file);
+            if (fileTmp.exists()) {
+                fileTmp.delete();
+            }
+            MyExcelUtil.writeOneSheetExcel(file, dataList, PersonalListModel.class);
+            new DownloadFile().download(file, response);
+        }else {
+            //learnFile/excel
+            String file = GlobalConstants.EXCEL_PATH +"/个人排榜.xlsx";
+            //先删除
+            File fileTmp = new File(file);
+            if (fileTmp.exists()) {
+                fileTmp.delete();
+            }
+            MyExcelUtil.writeOneSheetExcel(file, dataList, PersonalListModel.class);
+            new DownloadFile().download(file, response);
         }
-        MyExcelUtil.writeOneSheetExcel(file, dataList, PersonalListModel.class);
-        new DownloadFile().download(file, response);
+
     }
-    //导出个人excel
+    //导出小程序用户excel
     @GetMapping("/tbuserExcel")
     public void tbuserExcel(HttpServletResponse response,@RequestParam("secret") String secret,@RequestParam("username") String username,@RequestParam("mobile") String mobile) throws Exception {
         QueryWrapper<TbUser> queryWrapper=new QueryWrapper<>();
