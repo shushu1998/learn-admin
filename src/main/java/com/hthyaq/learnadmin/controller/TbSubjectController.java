@@ -186,7 +186,17 @@ public class TbSubjectController {
             tbSubject.setOptionD(tbSubjectModel.getOptionD());
             tbSubject.setOptionE(tbSubjectModel.getOptionE());
             tbSubject.setOptionF(tbSubjectModel.getOptionF());
-            tbSubject.setRightOption(tbSubjectModel.getRightOption());
+            String str="";
+            for(int i=0;i<tbSubjectModel.getRightOption().length();i++){
+                if(i==tbSubjectModel.getRightOption().length()-1){
+                    str+=tbSubjectModel.getRightOption().substring(i,i+1);
+                    break;
+                }else{
+                    str+=tbSubjectModel.getRightOption().substring(i,i+1);
+                    str+=",";
+                }
+            }
+            tbSubject.setRightOption(str);
             tbSubject.setContentType(Integer.parseInt(tbSubjectModel.getContentType()));
             flag= tbSubjectService.save(tbSubject);
         }
