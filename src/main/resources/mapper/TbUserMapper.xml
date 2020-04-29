@@ -74,6 +74,7 @@ GROUP BY
             <if test="companyName != null and companyName != ''">
                 and c.id like concat('%',#{companyName},'%')
             </if>
+            and t.is_recommend = '1'
         </where>
     </sql>
 
@@ -96,6 +97,7 @@ GROUP BY
             <if test="_parameter != null and _parameter != ''">
                 and c.id like concat('%',#{companyName},'%')
             </if>
+            and t.is_recommend = '1'
         </where>
     </sql>
 
